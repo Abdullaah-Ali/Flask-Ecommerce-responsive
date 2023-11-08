@@ -4,6 +4,7 @@ from os import path
 from flask_login import LoginManager
 from flask_mail import Mail 
 import os
+from flask import OAuth
 
 
 
@@ -31,6 +32,7 @@ def create_app():
     app.config['MAIL_PASSWORD'] = 'yourpas'
     mail = Mail(app)
     mail.init_app(app)
+    oauth = OAuth(app)
     
 
     

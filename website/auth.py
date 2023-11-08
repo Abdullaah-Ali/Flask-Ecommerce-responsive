@@ -6,18 +6,62 @@ from flask_login import login_user, login_required, logout_user, current_user
 from flask_mail import Message
 import pyotp
 from website import views
+from flask import OAuth
+from website import OAuth
+from website import app
 
 auth = Blueprint('auth', __name__)
+oauth = OAuth(app)
+google = oauth.remote_app(
+    'google',
+    consumer_key='464462423467-hrrha457ptid2g0j132pet8316d64klk.apps.googleusercontent.com',  # Replace with your Google OAuth client ID
+    consumer_secret='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',  # Replace with your Google OAuth client secret
+    request_token_params={
+        'scope': 'email',  # Request access to user's email
+    },
+    base_url='https://accounts.google.com/o/oauth2/auth',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+)
 
-appConf = {
-    
-  "client_id": "464462423467-hrrha457ptid2g0j132pet8316d64klk.apps.googleusercontent.com",
-  "client_secret": "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",
-  "auth_uri": "https://accounts.google.com/o/oauth2/v2/auth",
-  "FLASK_PORT": "5000",
-  "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration"
+@app.route('/google-authorized')
+def google_authorized():
+    response = google.authorized_response()
+    if response is None or response.get('access_token') is None:
+        flash('Access denied: reason={} error={}'.format(
+            request.args['error_reason'],
+            request.args['error_description']
+        ), 'error')
+        return redirect(url_for('auth.login'))
 
-}
+    # Get user data from the Google response
+    google_user_id = response.get('user_id')
+    google_email = response.get('email')
+    google_first_name = response.get('given_name')
+    google_password = response.get('password')  # Assuming Google provides the hashed password
+
+    # Check if the user already exists based on their Google email
+    user = User.query.filter_by(email=google_email).first()
+
+    if user:
+        # Update the user's data, set the first name, increment is_verified to 1, and store the Google-provided password
+        user.first_name = google_first_name
+        user.is_verified = 1
+        user.password = google_password  # Store the Google-provided password
+    else:
+        # Create a new user if the Google email doesn't exist in your database
+        new_user = User(email=google_email, first_name=google_first_name, password=google_password, is_verified=1)
+        db.session.add(new_user)
+
+    db.session.commit()
+
+    # Log in the user
+    login_user(user)
+
+    return redirect(url_for('views.home'))
+
 
 @auth.route('/login' , methods=['GET', 'POST'])
 def login():
