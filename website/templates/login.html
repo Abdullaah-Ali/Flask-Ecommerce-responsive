@@ -15,7 +15,7 @@
     <div class="container">
       <div class="forms-container">
         <div class="signin-signup">
-          <form action="" class="sign-in-form">
+          <form method = "POST"action="{{ url_for('auth.google_register') }}" class="sign-in-form">
             <h2 class="title">Sign In</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
@@ -35,9 +35,11 @@
               <a href="#" class="social-icon">
                 <i class="fab fa-twitter"></i>
               </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-google"></i>
-              </a>
+              <form method="POST" action="{{ url_for('auth.google_register') }}">
+                <button type="submit" class="handle_google_signup" id="google_register">
+                    Directly Login from Google <i class="fab fa-google"></i>
+                </button>
+            </form>
               <a href="#" class="social-icon">
                 <i class="fab fa-linkedin-in"></i>
               </a>
@@ -69,9 +71,7 @@
               <a href="#" class="social-icon">
                 <i class="fab fa-twitter"></i>
               </a>
-              <a href="#" class="social-icon">
-                <i class="fab fa-google"></i>
-              </a>
+ 
               <a href="#" class="social-icon">
                 <i class="fab fa-linkedin-in"></i>
               </a>
@@ -101,6 +101,6 @@
       </div>
     </div>
 
-    <script src="./app.js"></script>
+
   </body>
 </html>
