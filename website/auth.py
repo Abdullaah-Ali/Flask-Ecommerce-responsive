@@ -148,6 +148,7 @@ def authorize():
         flash(f'Welcome, {first_name}! You have been automatically verified.', category='success')
 
     # Redirect to the home page or any other desired page
+    #added the changes to it
     return redirect(url_for('views.home'))
 
 def generate_otp():
