@@ -4,7 +4,12 @@ from os import path
 from flask_login import LoginManager
 from flask_mail import Mail 
 import os
-from flask import OAuth
+from authlib.integrations.flask_client import OAuth
+
+
+
+
+
 
 
 
@@ -14,16 +19,19 @@ from flask import OAuth
 
 
 db = SQLAlchemy()
-DB_NAME = 'qwerty.db'
+DB_NAME = 'ecommerce.db'
 
 mail = Mail()
+oauth = OAuth()
 
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-    db.init_app(app)
+    with app.app_context():
+        db.init_app(app)
+        oauth.init_app(app)
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
@@ -32,7 +40,9 @@ def create_app():
     app.config['MAIL_PASSWORD'] = 'yourpas'
     mail = Mail(app)
     mail.init_app(app)
-    oauth = OAuth(app)
+
+
+        
     
 
     

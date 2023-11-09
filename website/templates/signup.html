@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>
+
     <title>Registration Page</title>
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='sign.css') }}">
     <!-- Link to your CSS file -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <meta name="google-signin-client_id" content="464462423467-hrrha457ptid2g0j132pet8316d64klk.apps.googleusercontent.com"
+    
 </head>
 <body>
     <div class="registration-container">
         <h2>Register</h2>
-        <form id="registration-form">
+        <form id="registration-form" method="POST" action="{{ url_for('auth.sign_up') }}">
             <div class="input-group">
                 <label for="first-name">First Name</label>
                 <input type="text" id="first-name" name="first-name" required>
@@ -32,16 +37,15 @@
                 <label for="confirm-password">Confirm Password</label>
                 <input type="password" id="confirm-password" name="confirm-password" required>
             </div>
-            
-            
-            <button type="submit" class="register-button" id="register-button">Register</button>
-            <div class="google-auth" id="google-register-button">
-            <i class="fab fa-google"></i> Register with Google
-            </div>
+
+            <button type="submit" class="register" id="register-button">Register</button>
         </form>
-        <div class="google-auth">
-            <i class="fab fa-google"></i> Register with Google
-        </div>
+
+        <form method="POST" action="{{ url_for('auth.google_register') }}">
+            <button type="submit" class="handle_google_signup" id="google_register">
+                Directly Register from Google <i class="fab fa-google"></i>
+            </button>
+        </form>
     </div>
 </body>
 </html>
