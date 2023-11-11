@@ -17,7 +17,7 @@
         <div class="container">
             <div class="navbar">
                 <div class="logo">
-                    <a href="index.html"><img src="images/logo.png" alt="logo" width="125px"></a>
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" width="125px">
                 </div>
                 <nav>
                     <ul id="MenuItems">
@@ -28,8 +28,8 @@
                         <li><a href="account.html">Account</a></li>
                     </ul>
                 </nav>
-                <a href="cart.html"><img src="images/cart.png" width="30px" height="30px"></a>
-                <img src="images/menu.png" class="menu-icon" onclick="menutoggle()">
+                <a href="cart.html"><img src="{{ url_for('static', filename='images/cart.png') }}" width="30px" height="30px"></a>
+                <img src="{{ url_for('static', filename='images/menu.png') }}" class="menu-icon" onclick="menutoggle()">
             </div>
             <div class="row">
                 <div class="col-2">
@@ -39,8 +39,8 @@
                     <a href="" class="btn">Explore Now &#8594;</a>
                 </div>
                 <div class="col-2">
-                    <img src="images/image1.png">
-                </div>
+                    <img src="{{ url_for('static', filename='images/image124.png') }}">
+             </div>
             </div>
         </div>
     </div>
@@ -51,13 +51,13 @@
         <div class="small-container">
             <div class="row">
                 <div class="col-3">
-                    <img src="images/category-1.jpg">
+                    <img src="{{ url_for('static', filename='images/category-1.jpg') }}">
                 </div>
                 <div class="col-3">
-                    <img src="images/category-2.jpg">
+                    <img src="{{ url_for('static', filename='images/category-2.jpg') }}">
                 </div>
                 <div class="col-3">
-                    <img src="images/category-3.jpg">
+                    <img src="{{ url_for('static', filename='images/category-3.jpg') }}">
                 </div>
             </div>
         </div>
@@ -69,7 +69,7 @@
         <h2 class="title">Featured Products</h2>
         <div class="row">
             <div class="col-4">
-                <a href="product_details.html"><img src="images/product-1.jpg"></a>
+                <a href="product_details.html"><img src="{{ url_for('static', filename='images/product-1.jpg') }}"></a>
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -81,7 +81,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-2.jpg">
+                <img src="{{ url_for('static', filename='images/product-2.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -93,7 +93,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-3.jpg">
+                <img src="{{ url_for('static', filename='images/product-3.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -105,7 +105,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-4.jpg">
+                <img src="{{ url_for('static', filename='images/product-4.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -120,7 +120,7 @@
         <h2 class="title">Latest Products</h2>
         <div class="row">
             <div class="col-4">
-                <img src="images/product-5.jpg">
+                <img src="{{ url_for('static', filename='images/product-5.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -132,7 +132,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-6.jpg">
+                <img src="{{ url_for('static', filename='images/product-6.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -144,7 +144,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-7.jpg">
+                <img src="{{ url_for('static', filename='images/product-7.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -156,7 +156,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-8.jpg">
+                <img src="{{ url_for('static', filename='images/product-8.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -170,7 +170,7 @@
         </div>
         <div class="row">
             <div class="col-4">
-                <img src="images/product-9.jpg">
+                <img src="{{ url_for('static', filename='images/product-9.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -182,7 +182,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-10.jpg">
+                <img src="{{ url_for('static', filename='images/product-10.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -194,7 +194,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-11.jpg">
+                <img src="{{ url_for('static', filename='images/product-11.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -206,7 +206,7 @@
                 <p>$50.00</p>
             </div>
             <div class="col-4">
-                <img src="images/product-12.jpg">
+                <img src="{{ url_for('static', filename='images/product-12.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -225,7 +225,7 @@
         <div class="small-container">
             <div class="row">
                 <div class="col-2">
-                    <img src="images/exclusive.png" class="offer-img">
+                    <img src="{{ url_for('static', filename='images/exclusive.png') }}" class="offer-img">
                 </div>
                 <div class="col-2">
                     <p>Exclusively Available on RedStore</p>
