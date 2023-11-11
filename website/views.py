@@ -20,16 +20,9 @@ views = Blueprint('views',__name__ )
 
 #defininf the root so whenever its hit homepage is called
 @views.route('/')
-@login_required
+
 def home():
-    
-    if current_user.is_authenticated:
-        # User is logged in, so proceed to show the home page
-        notes = Note.query.filter_by(user_id=current_user.id).all()
-        return render_template('home.html', notes=notes)
-    else:
-    
-        return redirect(url_for('auth.login'))
+    return render_template('home.html')
 
 @views.route('/', methods=['POST', 'GET'])
 def addtask():
