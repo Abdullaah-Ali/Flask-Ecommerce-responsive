@@ -9,6 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 </head>
 
 <body>
@@ -28,7 +38,16 @@
                         <li><a href="account.html">Account</a></li>
                     </ul>
                 </nav>
-                <a href="cart.html"><img src="{{ url_for('static', filename='images/cart.png') }}" width="30px" height="30px"></a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cartModal">
+                    <img src="{{ url_for('static', filename='images/cart.png') }}" width="30px" height="30px">
+                   Open Cart
+                </button>
+
+                    
+                
+                    <!-- Add a button to toggle the cart -->
+
+                </form>
                 <img src="{{ url_for('static', filename='images/menu.png') }}" class="menu-icon" onclick="menutoggle()">
             </div>
             <div class="row">
@@ -333,6 +352,39 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add content for your cart here -->
+                    <!-- For example, display items from the user's cart -->
+                    <ul>
+                        {% for item in current_user.items %}
+                            <li>{{ item.productName }} - ${{ item.productPrice }}</li>
+                        {% endfor %}
+                    </ul>
+                
+                    {% if not current_user.items %}
+                        <p>Your cart is empty.</p>
+                    {% endif %}
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <!-- Add other buttons or actions as needed -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
     <!-- javascript -->
 
     <script>
@@ -348,6 +400,6 @@
         }
     </script>
 
-</body>
 
-</html>
+
+

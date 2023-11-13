@@ -24,6 +24,7 @@ views = Blueprint('views',__name__ )
 def home():
     return render_template('home.html')
 
+
 @views.route('/', methods=['POST', 'GET'])
 def addtask():
  # Use 'views.index' instead of 'index'
