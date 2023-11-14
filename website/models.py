@@ -20,7 +20,6 @@ class Cart(db.Model):
     productName = db.Column(db.String(255))
     productPrice = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    
     user = db.relationship('User', backref=db.backref('items', lazy=True))
     
 class User(db.Model, UserMixin):
