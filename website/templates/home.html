@@ -35,7 +35,7 @@
                         <li><a href="products.html">Products</a></li>
                         <li><a href="#">About</a></li>
                         <li><a href="/logout">Logout From Page</a></li>
-                        <li><a href="#">Account</a></li>
+                        <li><a href="/signup">Account</a></li>
                     </ul>
                 </nav>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cartModal">
@@ -173,10 +173,15 @@
                     <i class="fa fa-star-o"></i>
                 </div>
                 <p>$50.00</p>
+                <form method="POST" action="{{ url_for('views.addproduct') }}">
+                    <input type="hidden" name="product_name" value="Red Printed T-Shirt">
+                    <input type="hidden" name="product_price" value="50.00">
+                    <button type="submit">  Add to Cart</button>
+                </form>
             </div>
             <div class="col-4">
                 <img src="{{ url_for('static', filename='images/product-8.jpg') }}">
-                <h4>Red Printed T-Shirt</h4>
+                <h4>Fossil Black premium watch</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
@@ -185,12 +190,17 @@
                     <i class="fa fa-star-o"></i>
                 </div>
                 <p>$50.00</p>
+                <form method="POST" action="{{ url_for('views.addproduct') }}">
+                    <input type="hidden" name="product_name" value="Fossil Black premium watch">
+                    <input type="hidden" name="product_price" value="50.00">
+                    <button type="submit">  Add to Cart</button>
+                </form>
             </div>
         </div>
         <div class="row">
             <div class="col-4">
                 <img src="{{ url_for('static', filename='images/product-9.jpg') }}">
-                <h4>Red Printed T-Shirt</h4>
+                <h4>Roadster Black premium wathc Limited edition    </h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star"></i>
@@ -198,7 +208,12 @@
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star-o"></i>
                 </div>
-                <p>$50.00</p>
+                <p>$60.00</p>
+                <form method="POST" action="{{ url_for('views.addproduct') }}">
+                    <input type="hidden" name="product_name" value="Roadster Black premium wathc Limited edition">
+                    <input type="hidden" name="product_price" value="60.00">
+                    <button type="submit">  Add to Cart</button>
+                </form>
             </div>
             <div class="col-4">
                 <img src="{{ url_for('static', filename='images/product-10.jpg') }}">
@@ -353,36 +368,41 @@
     </div>
 
 
-    <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!-- Add content for your cart here -->
-                    <!-- For example, display items from the user's cart -->
-                    <ul>
-                        {% for item in current_user.items %}
-                            <li>{{ item.productName }} - ${{ item.productPrice }}</li>
-                        {% endfor %}
-                    </ul>
-                
-                    {% if not current_user.items %}
-                        <p>Your cart is empty.</p>
-                    {% endif %}
+            <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Add content for your cart here -->
+                            <!-- For example, display items from the user's cart -->
+                            <ul>
+                                {% for item in current_user.items %}
+                                    <li>{{ item.productName }} - ${{ item.productPrice }}
+                                        <form method="POST" action="{{ url_for('views.remove_from_cart', item_id=item.id) }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                          </form>
+                                    
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        
+                            {% if not current_user.items %}
+                                <p>Your cart is empty.</p>
+                            {% endif %}
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <!-- Add other buttons or actions as needed -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <!-- Add other buttons or actions as needed -->
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
     
 
     <!-- javascript -->

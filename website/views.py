@@ -5,7 +5,7 @@ from flask import request
 from website import db 
 from flask import current_app, session
 from flask_login import current_user
-from .models import User, Note
+from .models import User, Note , Cart
 from sqlalchemy.exc import SQLAlchemyError
 import requests
 from flask import flash
@@ -24,46 +24,39 @@ views = Blueprint('views',__name__ )
 def home():
     return render_template('home.html')
 
-
+#when the button for the cart is clicked then the db should be upadted from the product and the price of it it
 @views.route('/', methods=['POST', 'GET'])
-def addtask():
+@login_required
+def addproduct():
  # Use 'views.index' instead of 'index'
     if request.method == 'POST':
-        task = request.form.get('addtask')
+        # Get the product name and product price from the form data
+            product_name = request.form.get('product_name')
+            product_price = request.form.get('product_price')
+
        
-        if task:
+       
+            
             # Get the current user's ID using the Flask-Login current_user attribute
             user_id = current_user.id
             # Create a new Note and add it to the database
-            new_note = Note(text=task, user_id=user_id)  # Use 'task' and 'user_id' variables
-            db.session.add(new_note)
+            new_product = Cart(productName=product_name, user_id=user_id , productPrice=product_price)  
+            db.session.add(new_product)
             db.session.commit()
             
-        return redirect(url_for('views.home'))
+            return redirect(url_for('views.home'))
     
-    
-@views.route('/alltasldelete' , methods=['POST'])
-def deletealltask():
-    
-    if request.method=='POST':
-        texts = Note.query.filter_by(user_id=current_user.id).all() 
-        for text in texts:
-            db.session.delete(text)
-            db.session.commit()
-        flash('All the tasks have been deleted' ,  category='success')
-    return redirect(url_for('views.home'))     
-    
-@views.route('deletetask' , methods=['POST' , 'GET'])
-def deletetask():
-    task_message = request.form.get('deletetask')  # Get the task message from the form input
-    tasks = Note.query.filter_by(user_id=current_user.id, text=task_message).all()
 
-    if tasks:
-        for task in tasks:
-            db.session.delete(task)
+
+@login_required
+@views.route('/remove_from_cart/<int:item_id>', methods=['POST'])
+def remove_from_cart(item_id):
+    if request.method == 'POST':
+        item_to_remove = Cart.query.get(item_id)
+    
+        if item_to_remove and item_to_remove.user_id == current_user.id:
+            # Remove the item from the database
+            db.session.delete(item_to_remove)
             db.session.commit()
-        flash('Task(s) have been deleted', category='success')
-    else:
-        flash('Task not found', category='error')
 
     return redirect(url_for('views.home'))
