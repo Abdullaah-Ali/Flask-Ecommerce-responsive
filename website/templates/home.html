@@ -382,17 +382,20 @@
                             <!-- For example, display items from the user's cart -->
                             <ul>
                                 {% for item in current_user.items %}
-                                    <li>{{ item.productName }} - ${{ item.productPrice }}
+                                    <li>{{ item.productName }} - ${{ item.productPrice }} - Quantity: {{ item.quantity }}
                                         <form method="POST" action="{{ url_for('views.remove_from_cart', item_id=item.id) }}">
                                             <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                                           </form>
                                     
                                     </li>
                                 {% endfor %}
+                                
                             </ul>
                         
                             {% if not current_user.items %}
                                 <p>Your cart is empty.</p>
+                            {% else %}
+                                <p>Total Amount: ${{ current_user.totalamt }}</p>
                             {% endif %}
 
                         </div>

@@ -19,16 +19,20 @@ class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     productName = db.Column(db.String(255))
     productPrice = db.Column(db.Integer)
-    totalamt  = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref=db.backref('items', lazy=True))
+
     
+    
+        
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique= True)
     password = db.Column(db.String(150))
     first_name= db.Column(db.String(150))
     otp = db.Column(db.String(16))
+    totalamt= db.Column(db.Integer,default=0)
     is_verified = db.Column(db.Boolean, default=0)  # Change the default value to 0
     
 
