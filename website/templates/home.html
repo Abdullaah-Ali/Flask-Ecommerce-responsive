@@ -35,7 +35,7 @@
                         <li><a href="products.html">Products</a></li>
                         <li><a href="#">About</a></li>
                         <li><a href="/logout">Logout From Page</a></li>
-                        <li><a href="/signup">Account</a></li>
+                        <li><a href="/login">Account</a></li>
                     </ul>
                 </nav>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cartModal">
@@ -396,8 +396,12 @@
                                 <p>Your cart is empty.</p>
                             {% else %}
                                 <p>Total Amount: ${{ current_user.totalamt }}</p>
-                            {% endif %}
-
+                          
+                                    <!-- Add Checkout Button  -->
+                                    <form method="POST" action="{{ url_for('views.checkout') }}">
+                                        <button type="submit" class="btn btn-primary">Checkout</button>
+                                    </form>
+                                    {% endif %}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

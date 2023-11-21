@@ -9,7 +9,6 @@ from website import views
 from website import oauth
 
 
-from flask_oauthlib.client import OAuth
 
 
 
@@ -101,6 +100,9 @@ def sign_up():
 
 
 
+
+
+# Update your OAuth registration to include the new token_updater
 oauth.register(
     name='google',
     client_id='464462423467-hrrha457ptid2g0j132pet8316d64klk.apps.googleusercontent.com',
@@ -115,14 +117,15 @@ oauth.register(
 )
 
 
+# Your existing route for initiating Google OAuth
 @auth.route('/google_register', methods=['GET', 'POST'])
 def google_register():
     if request.method == 'POST':
-        print("The function is being called and hence it's good to go")
         google = oauth.create_client('google')
         redirect_uri = url_for('auth.authorize', _external=True)
         return google.authorize_redirect(redirect_uri)
 
+# Your existing route for handling the authorization callback
 @auth.route('/authorize')
 def authorize():
     google = oauth.create_client('google')
@@ -150,6 +153,7 @@ def authorize():
     # Redirect to the home page or any other desired page
     #added the changes to it
     return redirect(url_for('views.home'))
+
 
 def generate_otp():
     totp = pyotp.TOTP(pyotp.random_base32())

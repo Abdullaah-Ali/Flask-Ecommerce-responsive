@@ -38,6 +38,8 @@ def create_app():
     app.config['MAIL_USE_SSL'] = False
     app.config['MAIL_USERNAME'] = 'yours@gmail.com'
     app.config['MAIL_PASSWORD'] = 'yourpas'
+    app.config['STRIPE_PUBLIC_KEY'] = 'pk_test_51OEbyRI3XvqE4k0AqsimrKerDkmHHwAdrZvvds4j83IEEneodzzxcHg4HrBviXBfXTKcBH8VbWlkC6rN0X66U5sU00ctlkquxs'
+    app.config['STRIPE_SECRET_KEY'] = ''
     mail = Mail(app)
     mail.init_app(app)
 
