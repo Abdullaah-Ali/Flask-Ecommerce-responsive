@@ -113,9 +113,25 @@ def checkout():
             success_url='http://127.0.0.1:5000/',
             cancel_url='http://127.0.0.1:5000/',
             billing_address_collection='required',
-            shipping_address_collection={
-                'allowed_countries': ['US'],  # Specify the allowed countries for shipping
-            },
+            #its just the shipping addresss code provided by the stripe docs for all the coutry for now can be changed according to the need of client !
+    shipping_address_collection={
+        'allowed_countries': [
+            'AC', 'AD', 'AE', 'AF', 'AG', 'AI', 'AL', 'AM', 'AO', 'AQ', 'AR', 'AT', 'AU', 'AW', 'AX', 'AZ',
+            'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BL', 'BM', 'BN', 'BO', 'BQ', 'BR', 'BS', 'BT',
+            'BV', 'BW', 'BY', 'BZ', 'CA', 'CD', 'CF', 'CG', 'CH', 'CI', 'CK', 'CL', 'CM', 'CN', 'CO', 'CR', 'CV',
+            'CW', 'CY', 'CZ', 'DE', 'DJ', 'DK', 'DM', 'DO', 'DZ', 'EC', 'EE', 'EG', 'EH', 'ER', 'ES', 'ET', 'FI',
+            'FJ', 'FK', 'FO', 'FR', 'GA', 'GB', 'GD', 'GE', 'GF', 'GG', 'GH', 'GI', 'GL', 'GM', 'GN', 'GP', 'GQ',
+            'GR', 'GS', 'GT', 'GU', 'GW', 'GY', 'HK', 'HN', 'HR', 'HT', 'HU', 'ID', 'IE', 'IL', 'IM', 'IN', 'IO',
+            'IQ', 'IS', 'IT', 'JE', 'JM', 'JO', 'JP', 'KE', 'KG', 'KH', 'KI', 'KM', 'KN', 'KR', 'KW', 'KY', 'KZ',
+            'LA', 'LB', 'LC', 'LI', 'LK', 'LR', 'LS', 'LT', 'LU', 'LV', 'LY', 'MA', 'MC', 'MD', 'ME', 'MF', 'MG',
+            'MK', 'ML', 'MM', 'MN', 'MO', 'MQ', 'MR', 'MS', 'MT', 'MU', 'MV', 'MW', 'MX', 'MY', 'MZ', 'NA', 'NC',
+            'NE', 'NG', 'NI', 'NL', 'NO', 'NP', 'NR', 'NU', 'NZ', 'OM', 'PA', 'PE', 'PF', 'PG', 'PH', 'PK', 'PL',
+            'PM', 'PN', 'PR', 'PS', 'PT', 'PY', 'QA', 'RE', 'RO', 'RS', 'RU', 'RW', 'SA', 'SB', 'SC', 'SE', 'SG',
+            'SH', 'SI', 'SJ', 'SK', 'SL', 'SM', 'SN', 'SO', 'SR', 'SS', 'ST', 'SV', 'SX', 'SZ', 'TA', 'TC', 'TD',
+            'TF', 'TG', 'TH', 'TJ', 'TK', 'TL', 'TM', 'TN', 'TO', 'TR', 'TT', 'TV', 'TW', 'TZ', 'UA', 'UG', 'US',
+            'UY', 'UZ', 'VA', 'VC', 'VE', 'VG', 'VN', 'VU', 'WF', 'WS', 'XK', 'YE', 'YT', 'ZA', 'ZM', 'ZW'
+        ],
+    },
             client_reference_id=client_reference_id,
         )
 
@@ -173,9 +189,11 @@ def webhook():
         postal_code = address.get('postal_code', 'N/A')
         state = address.get('state', 'N/A')
         client_reference_id = session['client_reference_id']
+        user_id = int(client_reference_id.split('_')[1])
 
+        print(f"Customer Email: {customer_email}, Invoice Number: {invoice_number}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {user_id} ")
+        update_user_cart_and_total(user_id, session)
 
-        print(f"Customer Email: {customer_email}, Invoice Number: {invoice_number}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {client_reference_id} ")
 
     elif event_type == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
@@ -187,3 +205,12 @@ def webhook():
         print('Unhandled event type {}'.format(event_type))
 
     return jsonify(success=True)
+
+def update_user_cart_and_total(user_id, session):
+    # Assuming you have a method to retrieve the user based on user_id
+    user = User.query.get(user_id)
+
+    # Clear the user's cart (delete all cart entries)
+    Cart.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+
