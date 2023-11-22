@@ -109,8 +109,8 @@ def checkout():
             payment_method_types=['card'],
             line_items=cart_data,
             mode='payment',
-            success_url='https://your-website.com/success',
-            cancel_url='https://your-website.com/cart',
+            success_url='http://127.0.0.1:5000/',
+            cancel_url='http://127.0.0.1:5000/',
             billing_address_collection='required',
             shipping_address_collection={
                 'allowed_countries': ['US'],  # Specify the allowed countries for shipping
