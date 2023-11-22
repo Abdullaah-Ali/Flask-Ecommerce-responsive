@@ -104,6 +104,7 @@ def checkout():
     try:
         # Get the user's cart data dynamically from the database
         cart_data = get_cart_data(current_user.id)
+        client_reference_id = f"user_{current_user.id}"
 
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -114,7 +115,8 @@ def checkout():
             billing_address_collection='required',
             shipping_address_collection={
                 'allowed_countries': ['US'],  # Specify the allowed countries for shipping
-            }
+            },
+            client_reference_id=client_reference_id,
         )
 
         # Retrieve the Checkout Session ID from the response
@@ -163,7 +165,6 @@ def webhook():
         invoice_number = session['payment_intent']
         shipping_details = session.get('shipping_details', {})
         address = shipping_details.get('address', {})
-
         # Access specific fields within the address
         city = address.get('city', 'N/A')
         country = address.get('country', 'N/A')
@@ -171,8 +172,10 @@ def webhook():
         line2 = address.get('line2', 'N/A')
         postal_code = address.get('postal_code', 'N/A')
         state = address.get('state', 'N/A')
+        client_reference_id = session['client_reference_id']
 
-        print(f"Customer Email: {customer_email}, Invoice Number: {invoice_number}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state}")
+
+        print(f"Customer Email: {customer_email}, Invoice Number: {invoice_number}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {client_reference_id} ")
 
     elif event_type == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
