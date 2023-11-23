@@ -36,10 +36,10 @@ def create_app():
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
-    app.config['MAIL_USERNAME'] = 'yours@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'yourpas'
+    app.config['MAIL_USERNAME'] = 'ahere094@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'hpao tmpx hlyk jkkv'
     app.config['STRIPE_PUBLIC_KEY'] = 'pk_test_51OEbyRI3XvqE4k0AqsimrKerDkmHHwAdrZvvds4j83IEEneodzzxcHg4HrBviXBfXTKcBH8VbWlkC6rN0X66U5sU00ctlkquxs'
-    app.config['STRIPE_SECRET_KEY'] = ''
+    
     mail = Mail(app)
     mail.init_app(app)
 

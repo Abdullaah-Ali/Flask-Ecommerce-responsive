@@ -2,7 +2,7 @@ from flask import Blueprint , render_template
 from flask import redirect , url_for
 from flask_login import  login_required ,  current_user
 from flask import request
-from website import db 
+from website import db , mail
 from flask import current_app, session
 from flask_login import current_user
 from .models import User, Note , Cart
@@ -13,6 +13,7 @@ import random
 import stripe
 from flask import jsonify
 import pprint
+from flask_mail import Message
 
 
 
@@ -190,10 +191,10 @@ def webhook():
         state = address.get('state', 'N/A')
         client_reference_id = session['client_reference_id']
         user_id = int(client_reference_id.split('_')[1])
-
-        print(f"Customer Email: {customer_email}, Invoice Number: {invoice_number}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {user_id} ")
+        
         update_user_cart_and_total(user_id, session)
-
+        find_mail(user_id)
+        print(f"Customer Email: {customer_email}, Invoice Number: {invoice_number}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {user_id} ")
 
     elif event_type == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
@@ -213,4 +214,31 @@ def update_user_cart_and_total(user_id, session):
     # Clear the user's cart (delete all cart entries)
     Cart.query.filter_by(user_id=user_id).delete()
     db.session.commit()
+    
+    
+def find_email_by_user_id(user_id):
+    # Assuming you have a method to retrieve the user based on user_id
+    user = User.query.get(user_id)
+
+    if user:
+        return user.email
+        
+    else:
+        return None 
+    
+def find_mail(user_id):
+    customer_email = find_email_by_user_id(user_id)
+
+    # Print or use the email as needed
+    if customer_email:
+        print(f"Customer Email found: {customer_email}")
+        msg = Message('Invoice from Red Ecommerce store ', sender='ahere094@gmail.com', recipients=[customer_email])
+        msg.body = f'Your recipents is attached below using the html structure'
+        mail.send(msg)
+        print("msg send success ")
+        # You can also use the email for further processing if needed
+    else:
+        print("Customer Email not found")
+
+
 
