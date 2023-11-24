@@ -95,6 +95,7 @@ def get_cart_data(user_id):
                 },
                 'quantity': item.quantity,
             })
+            
 
     return cart_data
 
@@ -103,7 +104,6 @@ def get_cart_data(user_id):
 @views.route('/checkout', methods=['GET' , 'POST'])
 def checkout():
     try:
-        # Get the user's cart data dynamically from the database
         cart_data = get_cart_data(current_user.id)
         client_reference_id = f"user_{current_user.id}"
 
@@ -143,6 +143,9 @@ def checkout():
         checkout_url = f"https://checkout.stripe.com/checkout/session/{checkout_session_id}"
 
         # Redirect the user to the Stripe Checkout page
+
+
+
         return redirect(checkout_session.url)
 
     except stripe.error.StripeError as e:
@@ -178,6 +181,10 @@ def webhook():
     event_type = event['type']
     if event_type == 'checkout.session.completed':
         session = event['data']['object']
+        
+        line_items = stripe.checkout.Session.list_line_items(session['id'])
+        product_info = "\n".join([f"Product: {item['description']}, Quantity: {item['quantity']}" for item in line_items.get('data', [])])
+        print("Product Info:\n", product_info)
         customer_email = session['customer_details']['email']
         invoice_number = session['payment_intent']
         shipping_details = session.get('shipping_details', {})
@@ -191,11 +198,14 @@ def webhook():
         state = address.get('state', 'N/A')
         client_reference_id = session['client_reference_id']
         user_id = int(client_reference_id.split('_')[1])
-        
+    
+
         update_user_cart_and_total(user_id, session)
         find_mail(user_id)
         print(f"Customer Email: {customer_email}, Invoice Number: {invoice_number}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {user_id} ")
 
+
+          
     elif event_type == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
         
@@ -239,6 +249,5 @@ def find_mail(user_id):
         # You can also use the email for further processing if needed
     else:
         print("Customer Email not found")
-
 
 

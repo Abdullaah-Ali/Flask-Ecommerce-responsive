@@ -180,7 +180,7 @@
                 </form>
             </div>
             <div class="col-4">
-                <img src="{{ url_for('static', filename='images/product-8.jpg') }}">
+                <img src="{{ url_for('static', filename='images/Fossil Black premium watch.jpg') }}">
                 <h4>Fossil Black premium watch</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -199,7 +199,7 @@
         </div>
         <div class="row">
             <div class="col-4">
-                <img src="{{ url_for('static', filename='images/product-9.jpg') }}">
+                <img src="{{ url_for('static', filename='images/Roadster Black premium wathc Limited edition.jpg') }}">
                 <h4>Roadster Black premium wathc Limited edition    </h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -209,6 +209,7 @@
                     <i class="fa fa-star-o"></i>
                 </div>
                 <p>$60.00</p>
+                
                 <form method="POST" action="{{ url_for('views.addproduct') }}">
                     <input type="hidden" name="product_name" value="Roadster Black premium wathc Limited edition">
                     <input type="hidden" name="product_price" value="60.00">
@@ -379,18 +380,18 @@
                         </div>
                         <div class="modal-body">
                             <!-- Add content for your cart here -->
-                            <!-- For example, display items from the user's cart -->
-                            <ul>
-                                {% for item in current_user.items %}
-                                    <li>{{ item.productName }} - ${{ item.productPrice }} - Quantity: {{ item.quantity }}
-                                        <form method="POST" action="{{ url_for('views.remove_from_cart', item_id=item.id) }}">
-                                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                                          </form>
-                                    
-                                    </li>
-                                {% endfor %}
-                                
-                            </ul>
+   <!-- For example, display items from the user's cart -->
+<ul>
+    {% for item in current_user.items %}
+        <li>
+            <img src="{{ url_for('static', filename='images/' + item.productName + '.jpg') }}"  width="40" height="50">
+            {{ item.productName }} - ${{ item.productPrice }} - Quantity: {{ item.quantity }}
+            <form method="POST" action="{{ url_for('views.remove_from_cart', item_id=item.id) }}">
+                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
                         
                             {% if not current_user.items %}
                                 <p>Your cart is empty.</p>
