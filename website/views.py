@@ -184,6 +184,8 @@ def webhook():
         
 
         customer_email = session['customer_details']['email']
+        username = session['customer_details']['name']
+        
         invoice_number = session['payment_intent']
         shipping_details = session.get('shipping_details', {})
         address = shipping_details.get('address', {})
@@ -203,8 +205,9 @@ def webhook():
         line_items = stripe.checkout.Session.list_line_items(session['id'])
         product_info = "\n".join([f"Product: {item['description']}, Quantity: {item['quantity']}" for item in line_items.get('data', [])])
         print("Product Info:\n", product_info)
-        find_mail(user_id, line_items, city, country, line1, line2, state, invoice_number)
-        print(f"Customer Email: {customer_email}, Invoice Number: {invoice_number}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {user_id} ")
+        find_mail(user_id, line_items, city, country, line1, line2, state, invoice_number , username , customer_email)
+        print(f"Customer Email: {customer_email}, user name: {username}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {user_id} " )
+      
 
 
           
@@ -238,7 +241,7 @@ def find_email_by_user_id(user_id):
     else:
         return None 
     
-def find_mail(user_id, line_items, city, country, line1, line2, state, invoice_number):
+def find_mail(user_id, line_items, city, country, line1, line2, state, invoice_number , username , customer_email):
     customer_email = find_email_by_user_id(user_id)
 
     if customer_email:
@@ -247,7 +250,7 @@ def find_mail(user_id, line_items, city, country, line1, line2, state, invoice_n
         address_mail = f"{country}, {city}, {line1}, {line2}, {state}"
         invoice_mail_no = invoice_number
 
-        send_invoice_email(customer_email, product_details, address_mail, invoice_mail_no)
+        send_invoice_email(customer_email, product_details, address_mail, invoice_mail_no, username, customer_email)
     else:
         print("Customer Email not found")
         
@@ -257,9 +260,9 @@ def calculate_grand_total(product_details):
     return sum(prices)
 
 
-def send_invoice_email(recipient, product_details, address, invoice_number):
+def send_invoice_email(recipient, product_details, address, invoice_number , username , customer_email):
     # Render the HTML template with actual data
-    html_content = render_template('invoice.html', product_details=product_details, address=address, invoice_number=invoice_number)
+    html_content = render_template('invoice.html', product_details=product_details, address=address, invoice_number=invoice_number ,  username=username , recipient=customer_email)
 
     # Send the email
     msg = Message('Invoice from Red Ecommerce Store', sender='ahere094@gmail.com', recipients=[recipient])

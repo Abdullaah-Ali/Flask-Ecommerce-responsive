@@ -27,7 +27,12 @@
   height: 100px;
   object-fit: cover;
 }
-
+.invoice-number {
+  text-align: right;
+  vertical-align: top;
+  padding-top: 0;
+  margin-bottom: 0;
+}
 
 
 .logo-container h1 {
@@ -69,11 +74,34 @@
   <title>Invoice</title>
 </head>
 <body>
-  <h1>Invoice</h1>
+
   <div class="logo-container">
+    <h1>Red Ecommerce Store
+    </h1>
     <img src="{{ url_for('static', filename='images/logo.png') }}" >
+
     
   </div>
+<div class="classshopdetails">
+
+
+</div>
+
+
+<div class="invoice-number">
+  <h4>Invoice Number:</h4>
+  <p>{{ invoice_number }}</p>
+</div>
+
+<div class="classdateandtime">
+  <h4>Created {{ created_at }}</h4>
+  <h4>Due {{ due_at }}</h4>
+</div>
+
+<div class="classusername">
+  <p>Customer Email: {{ recipient }}</p>
+  <p>Username: {{ username }}</p>
+</div>
 
   <h2>Product Details:</h2>
   <table class="invoice-table">
@@ -98,8 +126,7 @@
   <h2>Shipping Address:</h2>
   <p>{{ address }}</p>
 
-  <h2>Invoice Number:</h2>
-  <p>{{ invoice_number }}</p>
+
 
   <h2 class="grand-total">Grand Total: ${{ grand_total }}</h2>
 </body>
