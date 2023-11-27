@@ -18,21 +18,17 @@
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  background-color: aquamarine;
 }
 
 /* Style the logo image */
 
 .logo-container img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
+  width: 120px;
+  height: 30px;
+  
 }
-.invoice-number {
-  text-align: right;
-  vertical-align: top;
-  padding-top: 0;
-  margin-bottom: 0;
-}
+
 
 
 .logo-container h1 {
@@ -76,27 +72,30 @@
 <body>
 
   <div class="logo-container">
-    <h1>Red Ecommerce Store
-    </h1>
-    <img src="{{ url_for('static', filename='images/logo.png') }}" >
-
+    <img src="cid:logo-image" alt="Logo">
+    <p>We hope you have great shopping experience with us at the Red Ecommerce Store <br>
+    Heres Invoice for your pruchase</p>
     
   </div>
-<div class="classshopdetails">
 
+<div class="classaddressoftheuser">
+
+  <h4>Shipping Address:</h2>
+  <p>{{ address }}</p>
 
 </div>
 
-
-<div class="invoice-number">
-  <h4>Invoice Number:</h4>
-  <p>{{ invoice_number }}</p>
+<div class="hey">
+  <h5>Invoice Number:</h5>
+  <p class="hey">{{ invoice_number }}</p>
 </div>
 
 <div class="classdateandtime">
-  <h4>Created {{ created_at }}</h4>
-  <h4>Due {{ due_at }}</h4>
+  <h4>Created {{ due_at }}</h4>
+  <h4>Due {{ created_at }}</h4>
 </div>
+
+
 
 <div class="classusername">
   <p>Customer Email: {{ recipient }}</p>
@@ -123,8 +122,7 @@
     </tbody>
   </table>
 
-  <h2>Shipping Address:</h2>
-  <p>{{ address }}</p>
+ 
 
 
 

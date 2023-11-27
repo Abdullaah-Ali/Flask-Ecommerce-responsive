@@ -1,9 +1,12 @@
-from flask import Blueprint , render_template
+import os
+from flask import Blueprint, app , render_template
 from flask import redirect , url_for
 from flask_login import  login_required ,  current_user
 from flask import request
 from website import db , mail
 from flask import current_app, session
+from datetime import datetime, timedelta
+
 from flask_login import current_user
 from .models import User, Note , Cart
 from sqlalchemy.exc import SQLAlchemyError
@@ -179,13 +182,13 @@ def webhook():
 
     # Handle the event
     event_type = event['type']
+    formatted_due_datetime = None  # Initialize outside the if block
+
     if event_type == 'checkout.session.completed':
         session = event['data']['object']
-        
-
+        created_timestamp = session['created']
         customer_email = session['customer_details']['email']
         username = session['customer_details']['name']
-        
         invoice_number = session['payment_intent']
         shipping_details = session.get('shipping_details', {})
         address = shipping_details.get('address', {})
@@ -198,18 +201,22 @@ def webhook():
         state = address.get('state', 'N/A')
         client_reference_id = session['client_reference_id']
         user_id = int(client_reference_id.split('_')[1])
-    
 
         update_user_cart_and_total(user_id, session)
    
         line_items = stripe.checkout.Session.list_line_items(session['id'])
         product_info = "\n".join([f"Product: {item['description']}, Quantity: {item['quantity']}" for item in line_items.get('data', [])])
         print("Product Info:\n", product_info)
-        find_mail(user_id, line_items, city, country, line1, line2, state, invoice_number , username , customer_email)
-        print(f"Customer Email: {customer_email}, user name: {username}, Address: {city}, {country}, {line1}, {line2}, {postal_code}, {state} ,client user or example id extrracting using the session {user_id} " )
-      
 
+        created_datetime = datetime.utcfromtimestamp(created_timestamp)
+        formatted_created_datetime = created_datetime.strftime('%Y-%m-%d')
 
+        # Calculate due date as 14 days after creation
+        due_datetime = created_datetime + timedelta(days=14)
+        formatted_due_datetime = due_datetime.strftime('%Y-%m-%d')  # Use '%Y-%m-%d' for only date
+        print(f"The date that the recipient is created at is {formatted_created_datetime} and the due date is {formatted_due_datetime}")
+        
+        find_mail(user_id, line_items, city, country, line1, line2, state, invoice_number, username, customer_email, formatted_due_datetime, formatted_created_datetime)
           
     elif event_type == 'payment_intent.succeeded':
         payment_intent = event['data']['object']
@@ -241,7 +248,7 @@ def find_email_by_user_id(user_id):
     else:
         return None 
     
-def find_mail(user_id, line_items, city, country, line1, line2, state, invoice_number , username , customer_email):
+def find_mail(user_id, line_items, city, country, line1, line2, state, invoice_number , username , customer_email , formatted_created_datetime , formatted_due_datetime):
     customer_email = find_email_by_user_id(user_id)
 
     if customer_email:
@@ -250,7 +257,7 @@ def find_mail(user_id, line_items, city, country, line1, line2, state, invoice_n
         address_mail = f"{country}, {city}, {line1}, {line2}, {state}"
         invoice_mail_no = invoice_number
 
-        send_invoice_email(customer_email, product_details, address_mail, invoice_mail_no, username, customer_email)
+        send_invoice_email(customer_email, product_details, address_mail, invoice_mail_no, username, customer_email , formatted_created_datetime , formatted_due_datetime)
     else:
         print("Customer Email not found")
         
@@ -260,13 +267,23 @@ def calculate_grand_total(product_details):
     return sum(prices)
 
 
-def send_invoice_email(recipient, product_details, address, invoice_number , username , customer_email):
+
+
+def send_invoice_email(recipient, product_details, address, invoice_number , username , customer_email , formatted_created_datetime , formatted_due_datetime):
     # Render the HTML template with actual data
-    html_content = render_template('invoice.html', product_details=product_details, address=address, invoice_number=invoice_number ,  username=username , recipient=customer_email)
+    
+    html_content = render_template('invoice.html', product_details=product_details, address=address, invoice_number=invoice_number ,  username=username , recipient=customer_email ,created_at=formatted_created_datetime , due_at=formatted_due_datetime )
 
     # Send the email
+    logo_path = os.path.join(current_app.root_path, "static/images/logo.png")
+
     msg = Message('Invoice from Red Ecommerce Store', sender='ahere094@gmail.com', recipients=[recipient])
+    with open(logo_path, "rb") as logo:
+        msg.attach('logo.png', 'image/png', logo.read(), 'inline', headers=[['Content-ID', '<logo-image>']])
+    
     msg.html = html_content
+    
+ 
 
     mail.send(msg)
     print("Email sent successfully")
