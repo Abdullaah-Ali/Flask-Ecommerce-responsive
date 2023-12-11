@@ -505,6 +505,6 @@ form a{
 }
 
 .btn.google-register {
-    width: 100%; /* Make the button full-width */
-    margin-top: 10px; /* Add some space between the email input and the Google button */
+    width: 112%; /* Make the button full-width */
+    margin-top: 208px; /* Add some space between the email input and the Google button */
 }

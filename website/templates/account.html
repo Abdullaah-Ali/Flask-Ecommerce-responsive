@@ -52,7 +52,8 @@
 
                             <a href="">Forget Password</a>
                         </form>
-                        <form id="LoginForm" method="POST" action="{{ url_for('auth.google_register') }}">
+                        <form id="GoogleLogiForm" method="POST" action="{{ url_for('auth.google_register') }}">
+                            
                             <button type="submit" class="btn google-register">
                                 Directly Login from Google <i class="fab fa-google"></i>
                             </button>
@@ -64,12 +65,14 @@
                             <input type="password" placeholder="Password">
                             <button type="submit" class="btn">Register</button>
                         </form>
-
-                        <form id="RegForm" method="POST" action="{{ url_for('auth.google_register') }}">
-                            <button type="submit" class="btn google-register">
+                        
+                        <form id="GoogleRegForm" method="POST" action="{{ url_for('auth.google_register') }}">
+                            <button type="submit" class="btn google-register" name="register">
                                 Directly Login from Google <i class="fab fa-google"></i>
                             </button>
+                            
                         </form>
+                    
 
                     </div>
                 </div>

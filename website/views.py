@@ -324,6 +324,9 @@ def make_user_admin(email):
 def make_admin(email):
     make_user_admin(email)
     return f"User {email} is now an admin."
+    
+    
+    http://127.0.0.1:5000/make-admin/askskhj@gmail.com
 
 
 '''

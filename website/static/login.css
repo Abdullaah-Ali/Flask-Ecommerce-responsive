@@ -132,12 +132,15 @@ form.sign-in-form {
   border-color: #4481eb;
 }
 
+
+
+
 .btn {
-  width: 150px;
+  width: 200px;
   background-color: #5995fd;
   border: none;
   outline: none;
-  height: 49px;
+  height: 69px;
   border-radius: 49px;
   color: #fff;
   text-transform: uppercase;
@@ -335,6 +338,10 @@ form.sign-in-form {
     font-size: 0.7rem;
   }
 
+
+
+  
+
   .container:before {
     width: 1500px;
     height: 1500px;
@@ -397,4 +404,11 @@ form.sign-in-form {
     bottom: 28%;
     left: 50%;
   }
+
+  .btn-google-register {
+    display: block;
+    /* Add your other styles here */
+}
+
+
 }
