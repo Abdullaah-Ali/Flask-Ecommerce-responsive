@@ -307,6 +307,23 @@ def send_invoice_email(recipient, product_details, address, invoice_number , use
 
     mail.send(msg)
     print("Email sent successfully")
+    
+    
+'''    
+def make_user_admin(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        user.is_admin = 1
+        db.session.commit()
+        print(f"User {email} is now an admin.")
+    else:
+        print(f"No user found with email {email}.")
 
 
+@views.route('/make-admin/<email>')
+def make_admin(email):
+    make_user_admin(email)
+    return f"User {email} is now an admin."
 
+
+'''

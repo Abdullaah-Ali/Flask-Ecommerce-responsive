@@ -29,7 +29,7 @@ class MyAdminIndexView(AdminIndexView):
     def index(self):
         if not current_user.is_authenticated or not current_user.is_admin == 1:
             return redirect(url_for('auth.login', next=request.url))
-        return self.render('index.html')
+        return self.render('admin/index.html')
 
 class MyModelView(ModelView):
     def is_accessible(self):
@@ -106,7 +106,7 @@ def create_app():
 
     from .models import User, Note , Cart , product
     
-    admin.add_view(ModelView(product , db.session))
+    admin.add_view(MyModelView(product , db.session))
     
     create_database(app)
     
