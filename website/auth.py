@@ -9,6 +9,10 @@ from website import views
 from website import oauth
 
 
+#making the admin panel interface here 
+
+
+
 
 
 
@@ -38,7 +42,7 @@ def login():
     else:
         flash('Invalid email or password', category='error')
 
-    return render_template("login.html")
+    return render_template("account.html")
 
 #rather we will render html login page from the filesystem using jinja method
 #handiling post method for the user credentials
@@ -124,6 +128,9 @@ def google_register():
         google = oauth.create_client('google')
         redirect_uri = url_for('auth.authorize', _external=True)
         return google.authorize_redirect(redirect_uri)
+    
+    # In case of a GET request, you might want to handle it appropriately
+    return "Invalid request"
 
 # Your existing route for handling the authorization callback
 @auth.route('/authorize')

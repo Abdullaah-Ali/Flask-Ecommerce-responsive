@@ -5,8 +5,30 @@ from flask_login import LoginManager
 from flask_mail import Mail 
 import os
 from authlib.integrations.flask_client import OAuth
+from flask_admin import Admin , BaseView , expose
+from flask_admin.contrib.sqla import ModelView
+
+from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import current_user
 
 
+
+#making the admin panel interface here 
+
+class MyView(BaseView):
+    @expose('/')
+    def index(self):
+        return self.render('index.html')
+    
+class MyModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin == 1
+
+    
+
+
+    
+    
 
 
 
@@ -23,7 +45,7 @@ DB_NAME = 'ecommerce.db'
 
 mail = Mail()
 oauth = OAuth()
-
+admin = Admin()
 
 def create_app():
     app = Flask(__name__)
@@ -42,6 +64,9 @@ def create_app():
     
     mail = Mail(app)
     mail.init_app(app)
+    admin.init_app(app)
+    
+    
 
 
         
@@ -63,9 +88,14 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Note
+    from .models import User, Note , Cart , product
+    
+    admin.add_view(ModelView(product , db.session))
     
     create_database(app)
+    
+
+    
 
     
     
@@ -76,5 +106,7 @@ def create_database(app):
         if not path.exists('website/' + DB_NAME):
             db.create_all()
             print('Created Database!')
+            
+            
             
             

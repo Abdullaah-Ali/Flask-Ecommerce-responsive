@@ -381,28 +381,24 @@
                         <div class="modal-body">
                             <!-- Add content for your cart here -->
    <!-- For example, display items from the user's cart -->
-<ul>
+   <ul>
     {% for item in current_user.items %}
-        <li>
+        <li id="item-{{ item.id }}">
             <img src="{{ url_for('static', filename='images/' + item.productName + '.jpg') }}"  width="40" height="50">
             {{ item.productName }} - ${{ item.productPrice }} - Quantity: {{ item.quantity }}
-            <form method="POST" action="{{ url_for('views.remove_from_cart', item_id=item.id) }}">
-                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-            </form>
+            <button onclick="removeItemFromCart({{ item.id }})" type="button" class="btn btn-danger btn-sm">Remove</button>
         </li>
     {% endfor %}
 </ul>
-                        
-                            {% if not current_user.items %}
-                                <p>Your cart is empty.</p>
-                            {% else %}
-                                <p>Total Amount: ${{ current_user.totalamt }}</p>
-                          
-                                    <!-- Add Checkout Button  -->
-                                    <form method="POST" action="{{ url_for('views.checkout') }}">
-                                        <button type="submit" class="btn btn-primary">Checkout</button>
-                                    </form>
-                                    {% endif %}
+
+{% if not current_user.items %}
+    <p>Your cart is empty.</p>
+{% else %}
+    <p id="total-amount">Total Amount: ${{ current_user.totalamt }}</p>
+    <form method="POST" action="{{ url_for('views.checkout') }}">
+        <button type="submit" class="btn btn-primary">Checkout</button>
+    </form>
+{% endif %}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -414,6 +410,65 @@
     
 
     <!-- javascript -->
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+
+
+<!-- JavaScript -->
+function addItemToCart(item_id, product_name, product_price){
+    $.ajax({
+        type: "POST",
+        url: "/addproduct",
+        data : {
+            'item_id': item_id,
+            'product_name': product_name,
+            'product_price': product_price
+        },
+        success: function(response) {
+            if (response.success) {
+                // Add the item to the page
+                // You'll need to decide how you want to display the new item
+                // Update the total amount
+                $('#total-amount').text("Total Amount: $" + response.new_total);
+            } else {
+                // Handle the error
+                console.error(response.error);
+            }
+        }
+    })
+}
+
+
+
+
+
+</script>
+
+
+<script>
+function removeItemFromCart(item_id){
+    $.ajax({
+        type: "POST",
+        url: "/remove_from_cart/" + item_id,
+        success: function(response) {
+            if (response.success) {
+                // Remove the item from the page
+                $('#item-' + item_id).remove();
+                // Update the total amount
+                $('#total-amount').text("Total Amount: $" + response.new_total);
+            } else {
+                // Handle the error
+                console.error(response.error);
+            }
+        }
+    })
+}
+</script>
+
+
 
     <script>
         var MenuItems = document.getElementById("MenuItems");

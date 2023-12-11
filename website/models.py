@@ -5,6 +5,9 @@
 from website import db
 from flask_login import UserMixin
 from sqlalchemy import func
+from flask_admin.contrib.sqla import ModelView
+from website import admin
+
 
 
 
@@ -34,6 +37,15 @@ class User(db.Model, UserMixin):
     otp = db.Column(db.String(16))
     totalamt= db.Column(db.Integer,default=0)
     is_verified = db.Column(db.Boolean, default=0)  # Change the default value to 0
+    is_admin = db.Column(db.Boolean, default=0)
+    
+
+
+class product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    image = db.Column(db.String(120), nullable=False)
     
 
 

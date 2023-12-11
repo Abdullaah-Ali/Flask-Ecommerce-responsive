@@ -499,3 +499,12 @@ form a{
         display: none;
     }
 }
+
+.LoginForm {
+    position: relative;
+}
+
+.btn.google-register {
+    width: 100%; /* Make the button full-width */
+    margin-top: 10px; /* Add some space between the email input and the Google button */
+}

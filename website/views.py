@@ -3,12 +3,12 @@ from flask import Blueprint, app , render_template
 from flask import redirect , url_for
 from flask_login import  login_required ,  current_user
 from flask import request
-from website import db , mail
+from website import db , mail , admin
 from flask import current_app, session
 from datetime import datetime, timedelta
 
 from flask_login import current_user
-from .models import User, Note , Cart
+from .models import User, Note , Cart , product
 from sqlalchemy.exc import SQLAlchemyError
 import requests
 from flask import flash
@@ -24,10 +24,21 @@ from flask_mail import Message
 views = Blueprint('views',__name__ )
 
 
+
+
+
+
 #defininf the root so whenever its hit homepage is called
 @views.route('/')
 def home():
     return render_template('home.html')
+
+
+
+
+
+
+
 
 
 def update_totalamt(user):
@@ -72,14 +83,23 @@ def addproduct():
 def remove_from_cart(item_id):
     if request.method == 'POST':
         item_to_remove = Cart.query.get(item_id)
-    
+
         if item_to_remove and item_to_remove.user_id == current_user.id:
             # Remove the item from the database
             db.session.delete(item_to_remove)
             db.session.commit()
             update_totalamt(current_user)
 
+            # Return a JSON response indicating success
+            return jsonify({'success': True, 'new_total': current_user.totalamt})
+
+    # Return a JSON response indicating failure
+    return jsonify({'success': False, 'error': 'Item not found or user does not have permission'})
+
+
+
     return redirect(url_for('views.home'))
+
 
 stripe.api_key = 'sk_test_51OEbyRI3XvqE4k0A54gimD8HmieuLuGXRcwSgmPwwoGtAh2eoLQAYZW1IU5TqNOshgbbZlPyVPzhwPqRRqu8Uig100kbtGtV9t'
 def get_cart_data(user_id):
