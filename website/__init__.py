@@ -1,4 +1,3 @@
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -10,23 +9,39 @@ from flask_admin.contrib.sqla import ModelView
 
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_login import current_user
+from flask import request
+from flask_admin import AdminIndexView
+from functools import wraps
+from flask import current_app
+from flask import Flask, redirect, url_for
+
+
+
+
+
 
 
 
 #making the admin panel interface here 
 
-class MyView(BaseView):
+class MyAdminIndexView(AdminIndexView):
     @expose('/')
     def index(self):
+        if not current_user.is_authenticated or not current_user.is_admin == 1:
+            return redirect(url_for('auth.login', next=request.url))
         return self.render('index.html')
-    
+
 class MyModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.is_admin == 1
 
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('auth.login', next=request.url))
     
 
 
+
+
     
     
 
@@ -37,6 +52,7 @@ class MyModelView(ModelView):
 
 
 
+#flask authentication system for the admin
 
 
 
@@ -64,8 +80,9 @@ def create_app():
     
     mail = Mail(app)
     mail.init_app(app)
-    admin.init_app(app)
+    admin.init_app(app, index_view=MyAdminIndexView())
     
+
     
 
 
@@ -78,7 +95,6 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
     @login_manager.user_loader
-    
     def load_user(id):
         return User.query.get(int(id))
     
@@ -98,6 +114,7 @@ def create_app():
     
 
     
+
     
     return app
 
@@ -108,5 +125,8 @@ def create_database(app):
             print('Created Database!')
             
             
+
+            
+
             
             
