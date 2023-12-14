@@ -63,12 +63,11 @@
                     </div>
                     <p>{{product.price}}</p>4
 
-                    <form method="POST" action="{{ url_for('views.addproduct') }}">
-                        <input type="hidden" name="product_name" value="{{product.name}}">
-                        <input type="hidden" name="product_price" value="{{product.price}}">
-                        <button type="submit">  Add to Cart</button>
-                    
-                </form>
+                    <form id="add-to-cart-form" method="POST" action="{{ url_for('views.addproduct') }}">
+                        <input type="hidden" name="product_name" value="{{ product.name }}">
+                        <input type="hidden" name="product_price" value="{{ product.price }}">
+                        <button type="button" onclick="addToCart(this)">Add to Cart</button>
+                    </form>
                 
             </div>
                 {% set counter = counter + 1 %}
@@ -248,6 +247,33 @@
             }
         }
     </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function addToCart(button) {
+        var form = button.closest('form');
+        var formData = new FormData(form);
+    
+        fetch('{{ url_for('views.addproduct') }}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'success') {
+                // Update the cart UI here
+                alert(data.message);
+            } else {
+                alert('Failed to add product to cart.');
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    }
+    </script>
+
+
 
 </body>
 

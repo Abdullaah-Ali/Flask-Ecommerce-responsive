@@ -60,32 +60,22 @@ def update_totalamt(user):
 
     
 #when the button for the cart is clicked then the db should be upadted from the product and the price of it it
-@views.route('/', methods=['POST', 'GET'])
+@views.route('/addproduct', methods=['POST'])
 @login_required
 def addproduct():
     if request.method == 'POST':
-    # Get the product name and product price from the form data
         product_name = request.form.get('product_name')
         product_price = request.form.get('product_price')
-
-    # Check if the product is already in the user's cart
         existing_item = Cart.query.filter_by(productName=product_name, user_id=current_user.id).first()
-
         if existing_item:
-            # If the product is already in the cart, increment the quantity
             existing_item.quantity += 1
         else:
-            # Get the current user's ID using the Flask-Login current_user attribute
-            user_id = current_user.id
-            # Create a new Note and add it to the database
-            new_product = Cart(productName=product_name, user_id=user_id, productPrice=product_price, quantity=1)
+            new_product = Cart(productName=product_name, user_id=current_user.id, productPrice=product_price, quantity=1)
             db.session.add(new_product)
-
-        
-        
         db.session.commit()
         update_totalamt(current_user)
-        return redirect(url_for('views.home'))
+        return jsonify(message="Product added to cart", status="success")
+    return jsonify(message="Invalid request", status="fail")
     
 
 

@@ -31,3 +31,4 @@ profile = Blueprint('profile',__name__ )
 @profile.route('/userprofile')
 def showuserprofilr ():
      return render_template('profile.html')
+ 
