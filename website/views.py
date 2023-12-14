@@ -28,10 +28,21 @@ views = Blueprint('views',__name__ )
 
 
 
+
 #defininf the root so whenever its hit homepage is called
 @views.route('/')
 def home():
-    return render_template('home.html')
+    products = product.query.all()
+    return render_template('home.html', products=products)
+
+
+
+@views.route('/products')
+def productsPage ():
+    products = product.query.all()
+    return render_template('products.html', products=products)
+    
+        
 
 
 

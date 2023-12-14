@@ -14,9 +14,32 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <!-- Bootstrap JS and Popper.js -->
+<!-- Bootstrap JS and Popper.js -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<!-- Popper.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<!-- Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 
 
 </head>
@@ -31,17 +54,33 @@
                 </div>
                 <nav>
                     <ul id="MenuItems">
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="/">Home</a></li>
                         <li><a href="products.html">Products</a></li>
-                        <li><a href="#">About</a></li>
+                        
                         <li><a href="/logout">Logout From Page</a></li>
                         <li><a href="/login">Account</a></li>
+
                     </ul>
                 </nav>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cartModal">
                     <img src="{{ url_for('static', filename='images/cart.png') }}" width="30px" height="30px">
                    Open Cart
                 </button>
+                
+                
+                <!-- Profile dropdown button -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown button
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" href="#">Tags</a>
+                    <a class="dropdown-item" href="#">Privacy</a>
+                    <a class="dropdown-item" href="#">Settings</a>
+                    <a class="dropdown-item" href="#">Log out</a>
+                    </div>
+                </div>
 
                     
                 
@@ -215,7 +254,34 @@
                     <input type="hidden" name="product_price" value="60.00">
                     <button type="submit">  Add to Cart</button>
                 </form>
+
             </div>
+
+ <!-- after every  ___ 4 __ element a row is being formed
+           {% for product in products %}
+            <div class="col-4">
+                <img src="{{ product.image }}">
+                <h4>{{ product.name }}</h4>
+                <p>${{ product.price }}</p>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <form method="POST" action="/add_to_cart">
+                    <input type="hidden" name="product_name" value="{{ product.name }}">
+                    <input type="hidden" name="product_price" value="{{ product.price }}">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+        {% endfor %}
+                
+        -->
+
+
+
             <div class="col-4">
                 <img src="{{ url_for('static', filename='images/product-10.jpg') }}">
                 <h4>Red Printed T-Shirt</h4>
@@ -368,7 +434,7 @@
         </div>
     </div>
 
-
+<!--cart dropdown display  -->
             <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -384,7 +450,7 @@
    <ul>
     {% for item in current_user.items %}
         <li id="item-{{ item.id }}">
-            <img src="{{ url_for('static', filename='images/' + item.productName + '.jpg') }}"  width="40" height="50">
+            <img src="{{item.image}}"  width="40" height="50">
             {{ item.productName }} - ${{ item.productPrice }} - Quantity: {{ item.quantity }}
             <button onclick="removeItemFromCart({{ item.id }})" type="button" class="btn btn-danger btn-sm">Remove</button>
         </li>
@@ -405,11 +471,18 @@
                             <!-- Add other buttons or actions as needed -->
                         </div>
                     </div>
+
                 </div>
             </div>
     
+<!-- user profile dropdown system-->
 
-    <!-- javascript -->
+
+
+
+
+
+    <!-- javascript not a big deal heeheheh -->
 
 <!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

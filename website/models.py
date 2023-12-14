@@ -47,6 +47,17 @@ class product(db.Model):
     price = db.Column(db.Float, nullable=False)
     image = db.Column(db.String(120), nullable=False)
     
+    
+ 
+ 
+class profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name= db.Column(db.String(150))
+    profile_image = db.Column(db.String(255))
+    
+
+    
+    
 
 
 
