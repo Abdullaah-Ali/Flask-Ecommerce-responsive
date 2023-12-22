@@ -61,7 +61,6 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="/products">Products</a></li>
                         
-                        <li><a href="/logout">Logout From Page</a></li>
                         <li><a href="/login">Account</a></li>
 
                     </ul>
@@ -71,21 +70,38 @@
                    Open Cart
                 </button>
                 
-                
-                <!-- Profile dropdown button -->
                 <div class="dropdown">
                     <button class="hey" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3f" alt="" class="profile-picture">
-
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.profile and current_user.profile.first_name %}
+                                {% if current_user.profile.image %}
+                                    <img src="{{ url_for('static', filename='profile_images/' + current_user.profile.image) }}" alt="Profile Picture" class="profile-picture"> 
+                                {% endif %}
+                                {{ current_user.profile.first_name }}
+                            {% else %}
+                                Please Create Your Profile
+                            {% endif %}
+                        {% else %}
+                            Guest
+                        {% endif %}
                     </button>
+                    <!-- Dropdown menu options based on authentication -->
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#"> <i class="fas fa-user"></i> Profile</a>
-                        <a class="dropdown-item" href="#"> <i class="fas fa-cog"></i> Settings</a>
-                        <a class="dropdown-item" href="#"> <i class="fas fa-sign-out-alt"></i> Log out</a>
+                        {% if current_user.is_authenticated %}
+                            <a class="dropdown-item" href="/profile"> <i class="fas fa-user"></i> Profile</a>
+                            <a class="dropdown-item" href="#"> <i class="fas fa-cog"></i> Settings</a>
+                            <a  class="dropdown-item" href="/logout"> <i class="fas fa-sign-out-alt"></i> Log out</a>
+                        {% else %}
+                            <a class="dropdown-item" href="/login"> <i class="fas fa-sign-in-alt"></i> Log in</a>
+                            <a class="dropdown-item" href="#"> <i class="fas fa-user-plus"></i> Register Profile</a>
+                        {% endif %}
                     </div>
                 </div>
 
-                    
+
+
+                
+                
                 
                     <!-- Add a button to toggle the cart -->
 

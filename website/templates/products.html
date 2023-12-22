@@ -61,7 +61,7 @@
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star-o"></i>
                     </div>
-                    <p>{{product.price}}</p>4
+                    <p>$ {{product.price}} </p>4
 
                     <form id="add-to-cart-form" method="POST" action="{{ url_for('views.addproduct') }}">
                         <input type="hidden" name="product_name" value="{{ product.name }}">
@@ -233,6 +233,9 @@
         </div>
     </div>
 
+
+    <input type="text" id="mySearch" placeholder="Search...">
+
     <!-- javascript -->
 
     <script>
@@ -272,6 +275,34 @@
         });
     }
     </script>
+
+
+<script>
+let input = document.getElementById("mySearch");
+input.onkeyup = function() {
+    let product = {
+        name: input.value,  // Use input.value directly for the search keyword
+    };
+
+    // Update the URL with the search keyword without reloading the page
+    let newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?search=' + product.name;
+    window.history.pushState({path: newurl}, '', newurl);
+
+    fetch('/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(product),
+    })
+    .then((response) => response.json())
+    .then((data) => console.log('Success:', data))
+    .catch((error) => console.error('Error:', error));
+};
+
+
+    
+</script>
 
 
 

@@ -1,1 +1,75 @@
-<h1>reaaching there </h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .profile-pic-container {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .profile-form label {
+            display: block;
+            margin-top: 10px;
+        }
+        .profile-form input[type="text"],
+        .profile-form input[type="email"],
+        .profile-form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        .profile-form input[type="submit"] {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form class="profile-form" method="POST" enctype="multipart/form-data" action="{{ url_for('user_profile.user_profile') }}">
+        <div class="profile-pic-container">
+            <img id="profile-preview" src="{{ url_for('static', filename='profile.jpg') }}" alt="Profile Picture" class="profile-pic">
+        </div>
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" name="fname" value="{{ profile.first_name }}" required>
+        <label for="lname">Last Name:</label>
+        <input type="text" id="lname" name="lname" value="{{ profile.last_name }}" required>
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" value="{{ profile.gender }}" required>
+        <label for="number">Number:</label>
+        <input type="text" id="number" name="number" value="{{ profile.number }}" required>
+
+        <label for="profile_pic">Profile Picture:</label>
+        <input type="file" id="profile_pic" name="profile_pic" onchange="previewProfilePicture(this)">
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        function previewProfilePicture(input) {
+            const preview = document.getElementById('profile-preview');
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                // Display default profile picture if no file is selected
+                preview.src = "{{ url_for('static', filename='profile.jpg') }}";
+            }
+        }
+    </script>
+</body>
+</html>

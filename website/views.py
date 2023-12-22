@@ -52,6 +52,7 @@ def productsPage ():
 
 
 
+
 def update_totalamt(user):
     # Calculate the total amount based on cart items
     user.totalamt = sum(item.productPrice * item.quantity if item.productPrice is not None else 0 for item in user.items)
@@ -249,6 +250,36 @@ def webhook():
         print('Unhandled event type {}'.format(event_type))
 
     return jsonify(success=True)
+
+
+
+
+
+@views.route('/search', methods=['GET', 'POST'])
+
+def search():
+    data = request.get_json()
+    print("Received data:", data)
+
+    try:
+        print("Querying for product with name:", data.get('name'))
+        searched_products = product.query.filter(product.name.like('%' + data.get('name') + '%')).all()
+        if searched_products:
+            products = [{'id': p.id, 'name': p.name, 'price': p.price, 'image': p.image} for p in searched_products]
+            return jsonify(products)
+        else:
+            return jsonify({'message': 'Product not found'}), 404
+    except Exception as e:
+        print("Error:", str(e))
+        import traceback
+        traceback.print_exc()  # Print the traceback for detailed error information
+        return jsonify({'message': 'Internal Server Error'}), 500
+
+
+   
+   
+   
+   
 
 def update_user_cart_and_total(user_id, session):
     # Assuming you have a method to retrieve the user based on user_id

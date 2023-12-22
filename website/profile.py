@@ -8,7 +8,7 @@ from flask import current_app, session
 from datetime import datetime, timedelta
 
 from flask_login import current_user
-from .models import User, Note , Cart , product
+from .models import User, Note , Cart , product , Profile
 from sqlalchemy.exc import SQLAlchemyError
 import requests
 from flask import flash
@@ -26,9 +26,77 @@ from flask_mail import Message
 
 #here we weould create  a profile system for our website 
 
-profile = Blueprint('profile',__name__ )
+profile = Blueprint('user_profile', __name__)
 
-@profile.route('/userprofile')
-def showuserprofilr ():
-     return render_template('profile.html')
+
+
+
+@profile.route('/profile', methods=['GET' , 'POST'])
+@login_required
+def user_profile():
+    user_id = current_user.id
+    profile = Profile.query.filter_by(user_id=user_id).first()
+
+    if not profile:
+        profile = Profile(user_id=user_id)
+
+    if request.method == 'POST':
+        # Handle form submission for updating the profile
+        profile.first_name = request.form.get('fname')
+        profile.last_name = request.form.get('lname')
+        profile.gender = request.form.get('gender')
+        profile.number = request.form.get('number')
+        
+        
+        # Handle profile picture upload (you can add this part if needed)
+
+        db.session.add(profile)
+        db.session.commit()
+
+    return render_template('profile.html', profile=profile)
+
+          
+          
+
+
+
+@login_required
+@profile.route('/userprofile' , methods=['POST' , 'GET'])
+def showuserprofile ():
+     user_id = current_user.id   
+     profile = Profile.query.filter_by(user_id=current_user.id).first()
+     
+     if profile:
+          profile_data = {
+            'id': profile.id,
+            'first_name': profile.first_name,
+            'last_name': profile.last_name,
+            'image': profile.image,
+            'number': profile.number,
+            'gender': profile.gender
  
+          }
+          print(profile_data)
+          return jsonify(profile_data)
+     else :
+          return jsonify({'message': 'Profile does not exist for the current user'}), 404
+
+          
+   
+   
+ 
+ 
+ 
+ 
+  
+def register_profile():
+     
+     
+     return register_profile
+
+
+# we would creat the functions on the same webapp that would basically url hits honge aur jis user ko register karna he karlenga using the ajax page reload off karenge 
+#simmilarly har btn pe func call for the betterment 
+#image probllem oslution aswell
+#already registred / created profile added option aswell
+

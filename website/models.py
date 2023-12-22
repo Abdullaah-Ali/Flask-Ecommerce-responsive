@@ -38,6 +38,8 @@ class User(db.Model, UserMixin):
     totalamt= db.Column(db.Integer,default=0)
     is_verified = db.Column(db.Boolean, default=0)  # Change the default value to 0
     is_admin = db.Column(db.Boolean, default=0)
+    profile = db.relationship('Profile', backref=db.backref('user', lazy=True), uselist=False)
+
     
 
 
@@ -50,10 +52,18 @@ class product(db.Model):
     
  
  
-class profile(db.Model):
+
+class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name= db.Column(db.String(150))
-    profile_image = db.Column(db.String(255))
+    first_name = db.Column(db.String(150))
+    image = db.Column(db.String(255))  # Fix typo here
+    last_name = db.Column(db.String(255))
+    number = db.Column(db.Integer, default=0)
+    gender = db.Column(db.String(10))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+
+
     
 
     

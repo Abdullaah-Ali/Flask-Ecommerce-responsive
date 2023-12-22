@@ -22,6 +22,7 @@ from flask import Flask, redirect, url_for
 
 
 
+
 #making the admin panel interface here 
 
 class MyAdminIndexView(AdminIndexView):
@@ -106,11 +107,13 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(profile, url_prefix='/')
+
     
 
-    from .models import User, Note , Cart , product
+    from .models import User, Note , Cart , product , Profile
     
     admin.add_view(MyModelView(product , db.session))
+    admin.add_view(MyModelView(Profile , db.session))
    
     
     create_database(app)
