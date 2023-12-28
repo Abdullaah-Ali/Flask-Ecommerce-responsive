@@ -1,0 +1,46 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with AI</title>
+</head>
+<body>
+
+<h1>Chat with AI</h1>
+<ul id="message-list"></ul>
+<input type="text" id="message-input" placeholder="Type your message...">
+<button onclick="sendMessage()">Send</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+
+<script type="text/javascript" charset="utf-8">
+    var socket = io('http://localhost:5000');
+    
+
+
+    // Handle incoming messages
+    socket.on('message', function(data) {
+        var messageList = document.getElementById('message-list');
+        var listItem = document.createElement('li');
+        listItem.appendChild(document.createTextNode(data.user_id + ': ' + data.msg));
+        messageList.appendChild(listItem);
+    });
+
+    // Function to send a message
+    function sendMessage() {
+    var messageInput = document.getElementById('message-input');
+    var message = messageInput.value;
+    console.log('Sending message:', message);
+    socket.emit('message', { msg: message });
+    messageInput.value = '';
+}
+</script>   
+
+
+
+
+
+</body>
+</html>

@@ -14,6 +14,7 @@ from flask_admin import AdminIndexView
 from functools import wraps
 from flask import current_app
 from flask import Flask, redirect, url_for
+from flask_socketio import SocketIO
 
 
 
@@ -63,9 +64,16 @@ DB_NAME = 'ecommerce.db'
 mail = Mail()
 oauth = OAuth()
 admin = Admin()
+socketio = SocketIO()
+
+
+
+
 
 def create_app():
     app = Flask(__name__)
+    
+    
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     with app.app_context():
@@ -80,8 +88,16 @@ def create_app():
     app.config['STRIPE_PUBLIC_KEY'] = 'pk_test_51OEbyRI3XvqE4k0AqsimrKerDkmHHwAdrZvvds4j83IEEneodzzxcHg4HrBviXBfXTKcBH8VbWlkC6rN0X66U5sU00ctlkquxs'
     
     mail = Mail(app)
+    
+    
+    
     mail.init_app(app)
+    socketio.init_app(app, cors_allowed_origins="*")
+
+
+
     admin.init_app(app, index_view=MyAdminIndexView())
+    
     
 
     

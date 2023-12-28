@@ -3,7 +3,7 @@ from flask import Blueprint, app , render_template
 from flask import redirect , url_for
 from flask_login import  login_required ,  current_user
 from flask import request
-from website import db , mail , admin
+from website import db , mail , admin , socketio
 from flask import current_app, session
 from datetime import datetime, timedelta
 
@@ -16,8 +16,10 @@ import random
 import stripe
 from flask import jsonify
 import pprint
-from flask_mail import Message
+from flask import *
 
+from flask_mail import Message
+from flask_socketio import SocketIO, emit, disconnect
 
 
 
@@ -48,7 +50,6 @@ def user_profile():
         profile.number = request.form.get('number')
         
         
-        # Handle profile picture upload (you can add this part if needed)
 
         db.session.add(profile)
         db.session.commit()
@@ -89,10 +90,7 @@ def showuserprofile ():
  
  
   
-def register_profile():
-     
-     
-     return register_profile
+
 
 
 # we would creat the functions on the same webapp that would basically url hits honge aur jis user ko register karna he karlenga using the ajax page reload off karenge 
@@ -100,3 +98,21 @@ def register_profile():
 #image probllem oslution aswell
 #already registred / created profile added option aswell
 
+from flask_socketio import SocketIO
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
+@socketio.on('message')
+def handle_message(data):
+    print('Received message:', data['msg'])
+    emit('message', {'user_id': 'server', 'msg': f'Server received: {data["msg"]}'})
+
+
+@profile.route('/chatai', methods=['GET', 'POST'])
+def chatwithai():
+    return render_template('chatroom.html')

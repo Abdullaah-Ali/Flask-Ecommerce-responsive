@@ -1,0 +1,21 @@
+[
+    {
+        "product_name": "Black Shoes",
+        "price": 15,
+        "stock": 0,
+        "availability_at_physical_store": true
+    },
+    {
+        "product_name": "Blue Shoes",
+        "price": 100,
+        "stock": 5,
+        "availability_at_physical_store": false
+    },
+    {
+        "product_name": "Red Shoes",
+        "price": 20,
+        "stock": 10,
+        "availability_at_physical_store": true
+    }
+]
+
