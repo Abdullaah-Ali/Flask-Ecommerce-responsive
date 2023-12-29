@@ -9,7 +9,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.indexes import VectorstoreIndexCreator
 from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 from langchain.vectorstores import Chroma
-import constants
+from website import constants
 
 # Other constants
 os.environ["OPENAI_API_KEY"] = constants.APIKEY
@@ -41,16 +41,11 @@ chain = ConversationalRetrievalChain.from_llm(
 )
 
 chat_history = []
-while True:
-    if not query:
-        query = input("Prompt: ")
-    if query in ['quit', 'q', 'exit']:
-        sys.exit()
-    result = chain({"question": query, "chat_history": chat_history})
-    print(result['answer'])
 
+def get_chatbot_response(query, chat_history):
+    result = chain({"question": query, "chat_history": chat_history})
     chat_history.append((query, result['answer']))
-    query = None
+    return result['answer']
 
 
 #real code now

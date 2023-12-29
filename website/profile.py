@@ -97,22 +97,47 @@ def showuserprofile ():
 #simmilarly har btn pe func call for the betterment 
 #image probllem oslution aswell
 #already registred / created profile added option aswell
+ 
+
+#chat bot custom data tained
+    
 
 from flask_socketio import SocketIO
+from website.chatbot import get_chatbot_response
+
+
+
+
+
+
+chat_history = [] 
+
 @socketio.on('connect')
 def handle_connect():
-    print('Client connected')
+    user_id = request.sid
+    print(f'Client connected: {user_id}')
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    print('Client disconnected')
+    user_id = request.sid
+    print(f'Client disconnected: {user_id}')
 
 @socketio.on('message')
 def handle_message(data):
     print('Received message:', data['msg'])
-    emit('message', {'user_id': 'server', 'msg': f'Server received: {data["msg"]}'})
-
+    user_message = data['msg']  # Define user_message
+    chatbot_response = get_chatbot_response(user_message, chat_history)  # Pass chat_history to get_chatbot_response
+    emit('message', {'user_id': 'server', 'msg': f'Server received: {user_message}. Chatbot response: {chatbot_response}'})
+    print (chatbot_response)
+    
+    
+    
 
 @profile.route('/chatai', methods=['GET', 'POST'])
 def chatwithai():
     return render_template('chatroom.html')
+
+
+# --> server recived the msg take it to the file of chat bot and then response generate re send the msg to the sevrer 
+# -->  ,msg to be store in logs 7 days expire
+#--> 1 on 1 convo
